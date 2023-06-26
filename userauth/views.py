@@ -6,6 +6,9 @@ from .forms import UserLoginForm
 
 # Create your views here.
 class UserLoginView(FormView):
+    """ 
+    View for user login
+    """
     template_name = "login.html"
     form_class = UserLoginForm
 

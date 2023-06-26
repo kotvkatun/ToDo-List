@@ -10,10 +10,8 @@ class User(AbstractUser):
 
     """
 
-    username = models.CharField(
-        name="username", min_length=5, max_length=20, name="username", unique=True
-    )
-    password = models.CharField(min_length=6, max_length=20, name="password")
+    username = models.CharField(name="username", max_length=20, unique=True)
+    password = models.CharField(max_length=20, name="password")
 
     def __str__(self):
         """
