@@ -1,1 +1,3 @@
 .venv/
+pg_service.conf
+pgpass.conf
