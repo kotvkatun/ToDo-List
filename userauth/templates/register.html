@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block head %}
+    <script src={% static 'userauth/password_script.js' %} type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+    <form action={% url "register" %} method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <label>Confirm password:
+            <input type="password" id="confirm_password" onkeyup="check()">
+            <span id='message'></span>
+        </label>
+        <br>
+        <input type="checkbox" onclick="passwordHider2()">Show Password
+        <br> 
+        <input type="submit" id="register_submit" value="Register" disabled>
+    </form>
+{% endblock %}

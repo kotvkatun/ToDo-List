@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block head %}
-    <script src={% static 'userauth/password_script.js' %} type="text/javascript"></script>
+    <script src={% static 'userauth/password_script.js' %} type="text/javascript" defer></script>
 {% endblock %}
 
 {% block body %}
@@ -15,5 +15,8 @@
         {{ form.as_p }}
         <input type="checkbox" onclick="passwordHider1()">Show Password 
         <input type="submit" value="Log In">
+    </form>
+    <form action={% url "register" %}>
+        <input type="submit" value="Register">
     </form>
 {% endblock %}
