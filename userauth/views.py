@@ -1,30 +1,56 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.views.generic import FormView, CreateView
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import reverse, render, redirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.db import IntegrityError
 from .forms import UserLoginForm, UserRegisterForm
 from .models import User
+from todo.models import ToDoLists
 
 
 # Create your views here.
-class UserLoginView(FormView):
-    """ 
-    View for user login
-    """
-    template_name = "login.html"
-    form_class = UserLoginForm
+def login_view(request):
+    if request.method == "POST":
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
 
-    def form_valid(self, form):
-        username = form.cleaned_data["username"]
-        password = form.cleaned_data["password"]
-        user = authenticate(self.request, username=username, password=password)      
+        # Check if authentication successful
         if user is not None:
-            login(self.request, user)
-            return None
-        else:
-            pass
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(
+            request,
+            "login.html",
+            {"message": "Invalid username and/or password."},
+        )
 
-class UserRegisterView(FormView):
-    template_name = "register.html"
-    form_class = UserRegisterForm
-    fields = ['username', 'password']
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+
+
+def register(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        # Attempt to create new user
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+            todolist = ToDoLists.objects.create(owner=user)
+            todolist.save()
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        except IntegrityError:
+            return render(
+                request,
+                "register.html",
+                {"message": "Username already taken."},
+            )
+    return render(request, "register.html")

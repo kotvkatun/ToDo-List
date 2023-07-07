@@ -9,7 +9,7 @@ function passwordHider1() {
 
  
 function passwordHider2() {
-  var pswd1 = document.getElementById("id_password");
+  var pswd1 = document.getElementById("password");
   var pswd2 = document.getElementById("confirm_password");
   if (pswd1.type === "password" && pswd2.type === "password") {
     pswd1.type = "text";
@@ -23,7 +23,7 @@ function passwordHider2() {
  
 
 function check() {
-  var password = document.getElementById('id_password')
+  var password = document.getElementById('password')
   var confirm_password = document.getElementById('confirm_password')
   var message = document.getElementById('message')
   var register_submit = document.getElementById('register_submit')

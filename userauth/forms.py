@@ -16,16 +16,37 @@ class UserLoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("username", "password")
-        widgets = {"password": forms.widgets.Input(attrs={"type": "password", "id": "pswd1"})}
+        widgets = {
+            "username": forms.widgets.Input(attrs={"type": "text", "maxlength": 20}),
+            "password": forms.widgets.Input(
+                attrs={"type": "password", "id": "pswd1", "maxlength": 20}
+            ),
+        }
         labels = {"username": "Username:", "password": "Password:"}
 
 
 class UserRegisterForm(forms.ModelForm):
-
+    email = forms.EmailField(required=True)
     class Meta:
         model = User
-        fields = ("username", "password")
-        widgets = {"password": forms.widgets.Input(attrs={"type": "password", "id": "id_password", "onkeyup": "check()"})}
+        fields = ("username", "password", "email")
+        widgets = {
+            "username": forms.widgets.Input(attrs={"type": "text", "maxlength": 20}),
+            "password": forms.widgets.Input(
+                attrs={
+                    "type": "password",
+                    "id": "id_password",
+                    "onkeyup": "check()",
+                    "maxlength": 20,
+                }
+            ),
+        }
         labels = {"username": "Username:", "password": "Password:"}
-
-
+        
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
+    

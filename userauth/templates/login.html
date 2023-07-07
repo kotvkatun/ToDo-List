@@ -2,21 +2,33 @@
 {% load static %}
 
 {% block title %}
-    Log In
+    Sign In
 {% endblock %}
 
 {% block head %}
-    <script src={% static 'userauth/password_script.js' %} type="text/javascript" defer></script>
+    <script src="userauth/password_script.js" type="text/javascript" defer></script>
 {% endblock %}
 
 {% block body %}
-    <form action={% url "login" %} method="POST">
+
+    <h2>Login</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="checkbox" onclick="passwordHider1()">Show Password 
-        <input type="submit" value="Log In">
+        <div class="form-group">
+            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+            <input type="checkbox" onclick="passwordHider1()">Show Password
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login">
     </form>
-    <form action={% url "register" %}>
-        <input type="submit" value="Register">
-    </form>
+
+    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+
 {% endblock %}

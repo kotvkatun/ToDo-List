@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+    ToDo
+{% endblock %}
+
+{% block head %}
+    <link href={% static 'todo/todo.css' %} rel="stylesheet">
+    <script src={% static 'todo/todo_script.js' %} type='text/javascript' defer=""></script>
+{% endblock %}
+
+{% block body %}
+    <div id="myDIV" class="header">
+        <h2>My To Do List</h2>
+        <input class="topInput" type="text" id="myInput" placeholder="Title...">
+        <span onclick="newElement()" class="addBtn">Add</span>
+    </div>
+  
+    <form id="todoForm" method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <input class="btn btn-primary" onmouseover="send()" type="submit" value="Save your list">
+        </div>
+        <input type="hidden" id="JSONInput" value="">
+        <ul id="formList">
+        </ul>
+        {% if todojson %}
+            {{ todojson|json_script:"todojson" }}
+            <script>
+                const formList = document.getElementById("formList")
+                const todoitems = JSON.parse(JSON.parse(document.getElementById('todojson').textContent));
+                console.log(todoitems)
+                console.log(Object.keys(todoitems))
+                for (const key of Object.keys(todoitems)) {
+                    var listElement = document.createElement("li");
+                    listElement.innerHTML = todoitems[key].task;
+                    console.log(todoitems[key].check)
+                    if (todoitems[key].checked) {
+                        listElement.classList.toggle("checked");
+                    }
+                    formList.append(listElement);
+                }
+            </script>
+        {% endif %}
+    </form> 
+{% endblock %}

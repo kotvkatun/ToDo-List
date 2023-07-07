@@ -10,8 +10,14 @@
         <div>
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
+                <form action={% url 'logout' %}>
+                    <input type="submit" value="Logout">
+                </form>
             {% else %}
                 Not signed in.
+                <form action={% url 'login' %}>
+                    <input type="submit" value="Sign in">
+                </form>
             {% endif %}
         </div>
         {% block body %}

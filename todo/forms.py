@@ -1,3 +1,3 @@
-from django.forms import forms
+from django import forms
 # Forms for todo app
 
